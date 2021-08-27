@@ -14,3 +14,7 @@ def products(supplier_id):
     supplier = database.get_products(supplier_id)
     return render_template('products.html', products=products, supplier=supplier)
 
+@app.route("/categories")
+def categories():
+    categories = database.get_categories()
+    return render_template('category.html', categories=categories)

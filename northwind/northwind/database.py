@@ -33,3 +33,13 @@ def get_products(supplier_id):
     SELECT CompanyName FROM Supplier
      WHERE Id = %d """ % supplier_id)
 
+def get_categories():
+    return query("""select count(product.id) as ProductNumber , category.*
+                from product 
+
+                inner join category
+                on product.SupplierId=Category.id
+                    
+                Group by CategoryName""")
+
+
