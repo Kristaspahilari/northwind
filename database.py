@@ -1,6 +1,6 @@
 import sqlite3
 
-def query(query_text, *param, ):
+def query(query_text, *param):
     conn = sqlite3.connect('Northwind_large.sqlite')
     cur = conn.cursor()
     cur.execute(query_text, param)
@@ -27,24 +27,25 @@ def get_supplier_products(supplier_id):
     return query("""
                     SELECT * FROM Product
                     WHERE SupplierId = ?""", supplier_id)
-
-def get_products(supplier_id):
+def get_supplier(supplier_id):
     return query("""
-    SELECT CompanyName FROM Supplier
-     WHERE Id = %d """ % supplier_id)
-
+                    SELECT CompanyName FROM Supplier 
+                    WHERE Id = ?""", supplier_id)
 def get_categories():
-    return query("""select count(product.id) as ProductNumber , product.productname , supplier.CompanyName, category.*
-                    from Product
-                    inner join Supplier
-                        on product.SupplierId = supplier.Id
-                    inner join Category
-                        on product.CategoryId = category.Id
-                    
-                Group by CategoryName""")
-
-
-def get_categories_products(category_id):
     return query("""
-                    SELECT * FROM Category
-                    WHERE category.Id = ?""", category_id)
+                SELECT COUNT(Product.CategoryId) AS Count,Category.CategoryName,Category.Description, Category.Id as Id FROM Category
+                INNER JOIN Product
+                    ON Category.Id=Product.CategoryId
+                GROUP BY Product.CategoryId""")
+
+
+def get_categories_products(id):
+    return query("""
+                    SELECT Category.CategoryName, Category.Id AS Id, Product.ProductName
+                ,Supplier.CompanyName, Category.Id as Id
+                FROM Category
+                INNER JOIN Product
+                ON Category.Id=Product.CategoryId
+                INNER JOIN Supplier
+                ON Product.SupplierId=Supplier.Id
+                WHERE Category.Id= %d """ % id)
