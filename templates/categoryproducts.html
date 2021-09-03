@@ -10,22 +10,21 @@
 <body>
     <section class="section">
         <div class="container">
-            <h1 class="title">   
-             {{ category['CategoryName'] }}
+            <h1 class="title">
+                {{categories[0]['CategoryName']}}
             </h1>
 
             <table class="table">
                 <thead>
                     <tr>
                         <th>Company Name</th>
-                        <th>QProductt</th>
-        
+                        <th>Product</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for category in categories %}
                     <tr>
-                        <td>{{category[' CompanyName ']}}</td>
+                        <td><a href="{{url_for('products',supplier_id=category['Id'])}}">{{category['CompanyName']}}</a></td>
                         <td>{{category['ProductName']}}</td>
                     </tr>
                     {% endfor %}
